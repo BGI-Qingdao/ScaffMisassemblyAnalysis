@@ -1,0 +1,3 @@
+[submodule "SZContigAnalysis"]
+	path = SZContigAnalysis
+	url = https://gitlab.com/BGIQD/SZContigAnalysis.git
