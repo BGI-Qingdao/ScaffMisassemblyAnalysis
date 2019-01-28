@@ -202,7 +202,7 @@ int main(int argc , char ** argv)
 {
     if( argc != 5 )
     {
-        std::cerr<<"Usage "<<argv[0]<<" scaff_infos all_xxx_6 min_n min_c "<<std::endl;
+        std::cerr<<"Usage "<<argv[0]<<" scaff_infos all_xxx_5 min_n min_c "<<std::endl;
         return 0 ;
     }
 
