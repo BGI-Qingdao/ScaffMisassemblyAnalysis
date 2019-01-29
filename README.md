@@ -7,8 +7,11 @@
 or 
 
 > git clone https://gitlab.com/BGIQD/ScaffMissassemblyAnalysis.git
+
 > cd ScaffMissassemblyAnalysis/
+
 > git submodule init
+
 > git submodule update
 
 ## step 2 , compile source code
@@ -27,7 +30,9 @@ or
 
 ## example 
 
-> xxx/ScaffNGAReason.sh  chr21_quast/contigs_reports/all_alignments_chr21.tsv chr21_ogc1/contigs_reports/all_alignments_chr21_noverlap_new-scaff_seqs.tsv test/chr21_noverlap_new.scaff_infos 11 11
+> xxx/ScaffNGAReason.sh  chr21_quast/contigs_reports/all_alignments_chr21.tsv \\\
+>  chr21_ogc1/contigs_reports/all_alignments_chr21_noverlap_new-scaff_seqs.tsv \\\
+>  test/chr21_noverlap_new.scaff_infos 11 11
 
 ## output example 
 
