@@ -89,7 +89,8 @@ TOOLS_DIR=$TOOL_ROOT"/codes"
 cp $CTGAZ_DIR/* ./
 ./order_contig.sh $contig_quast >log_oc 2>&1 
 #>>>step 2, get scaffold order informtion
-$TOOLS_DIR/Scaff_Order_Detect sorted_unique_contig.txt < $scaff_infos >scaff_type.txt 2>log_sod
+awk $SCIPT_DIR/filter_contig_name.awk sorted_unique_contig.awk >sorted_unique_contig1.awk
+$TOOLS_DIR/Scaff_Order_Detect sorted_unique_contig1.txt < $scaff_infos >scaff_type.txt 2>log_sod
 #>>>step 3, get break point information
 cp $scaff_quast ./scaffold_quast_tmp.tsv
 $SCIPT_DIR/filter_allalianments.sh ./scaffold_quast_tmp.tsv >log_faa 2>&1 
