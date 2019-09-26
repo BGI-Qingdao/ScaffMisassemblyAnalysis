@@ -33,11 +33,11 @@ namespace BGIQD {
                 if( type == Type::InRef )
                     ost<<"InRef"<<'\t';
                 else if ( type == Type::WrongOrder )
-                    ost<<"WrongOrder";
+                    ost<<"WrongOrder"<<'\t';
                 else if ( type == Type::WrongOrientation)
-                    ost<<"WrongOrientation";
+                    ost<<"WrongOrientation"<<'\t';
                 else if ( type == Type::OOCorrect)
-                    ost<<"OOCorrect";
+                    ost<<"OOCorrect"<<'\t';
 
                 ost <<step<<'\t'
                     <<step_1<<'\t'
@@ -140,7 +140,7 @@ namespace BGIQD {
             {
                 if( line[0] == '>' )
                 {
-                    sscanf(line.c_str(),">scaffold_%d",&id);
+                    sscanf(line.c_str(),">scaffold %d",&id);
                     all_scaff[id].scaff_id = id ;
                 }
                 else
