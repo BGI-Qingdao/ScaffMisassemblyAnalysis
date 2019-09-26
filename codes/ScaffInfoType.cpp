@@ -16,7 +16,8 @@ namespace BGIQD {
                 >>step_num_1
                 >>ref_index
                 >>ref_name
-                >>ref_pos ;
+                >>ref_pos
+                >>ref_pos_end ;
             ist >>contig_id
                 >>pos
                 >>gap_size
@@ -28,67 +29,6 @@ namespace BGIQD {
             std::string extra_item ;
         }
 
-        /*
-        std::string ContigDetail::ToString() const 
-        {
-            std::ostringstream ost;
-
-            ost <<contig_id<<'\t'
-                <<(orientation ? '+' : '-')<<'\t'
-                <<gap_size<<'\t'
-                <<contig_len<<'\t'
-                <<start_pos<<'\t'
-                <<scaff_index<<'\t'
-                <<scaff_id;
-            for( const auto & pair : extra )
-            {
-                ost<<'\t'<<pair.first<<'='<<pair.second ;
-            }
-            return ost.str();
-        }
-
-        void ScaffInfo::FormatStartPos()
-        {
-            int start_pos= 1 ;
-            for( auto & contigd : a_scaff )
-            {
-                contigd.start_pos = start_pos;
-                start_pos += contigd.contig_len ;
-                start_pos += contigd.gap_size ;
-                if( contigd.scaff_id != scaff_id )
-                    contigd.scaff_id = scaff_id ;
-            }
-        }
-
-        void ScaffInfo::FormatIndex()
-        {
-            int index = 1 ;
-            for( auto & contigd : a_scaff )
-            {
-                contigd.scaff_index = index ;
-                index ++ ;
-                if( contigd.scaff_id != scaff_id )
-                    contigd.scaff_id = scaff_id ;
-            }
-        } 
-
-        void ScaffInfo::PrintScaff(  std::ostream &ost ) const
-        {
-            ost<<">scaffold "<<scaff_id<<'\n';
-            for(const auto & i : a_scaff)
-            {
-                ost<<i.ToString()<<'\n';
-            }
-        }
-
-        void ScaffInfoHelper::PrintAllScaff(std::ostream &ost ) const
-        {
-            for( const auto & pair :all_scaff )
-            {
-                pair.second.PrintScaff(ost);
-            }
-        } */
-
         void ScaffInfoHelper::LoadAllScaff(  std::istream &ist )
         {
             int id ;
@@ -97,7 +37,7 @@ namespace BGIQD {
             {
                 if( line[0] == '>' )
                 {
-                    sscanf(line.c_str(),">scaffold %d",&id);
+                    sscanf(line.c_str(),">scaffold_%d",&id);
                     all_scaff[id].scaff_id = id ;
                 }
                 else

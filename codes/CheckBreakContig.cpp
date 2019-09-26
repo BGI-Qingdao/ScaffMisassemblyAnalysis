@@ -42,30 +42,18 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
     for( size_t i = 0 ; i < a_scaff.size() ; i++ )
     {
         const auto & a_c = a_scaff.at(i);
-        if( a_c.contig_len + a_c.gap_size <= 0 )
-        {
-            contig_start ++ ;
-            continue;
-        }
+        // no negtive gap now
+        //if( a_c.contig_len + a_c.gap_size <= 0 )
+        //{
+        //    contig_start ++ ;
+        //    continue;
+        //}
 
-        int n_size = 0 ;
-        if( a_c.gap_size >= 0) 
-        {
-            int gap_size =  a_c.gap_size ;
-            if( gap_size < min_n )
-                gap_size = min_n ;
-            contig_end = contig_start + a_c.contig_len -1  ;
-            n_start = contig_start + a_c.contig_len ;
-            n_end = contig_start + a_c.contig_len + a_c.gap_size -1;
-            n_size = gap_size ;
-        }
-        else
-        {
-            contig_end = contig_start + a_c.contig_len -1 +  a_c.gap_size  ;
-            n_start =    contig_start + a_c.contig_len + a_c.gap_size ;
-            n_end =      contig_start + a_c.contig_len + a_c.gap_size + min_c -1 ;
-            n_size = min_c ;
-        }
+        int n_size = a_c.gap_size  ;
+        contig_start = a_c.start_pos ;
+        contig_end =   contig_start + a_c.contig_len -1 ;
+        n_start =      contig_start + a_c.contig_len ;
+        n_end =        contig_start + a_c.contig_len + a_c.gap_size -1 ;
 
         bool this_checked = false ;
         bool is_n = false ;
@@ -200,9 +188,9 @@ void UpdateBreakType( BGIQD::DEBUG::BreakArea & tmp )
 
 int main(int argc , char ** argv)
 {
-    if( argc != 5 )
+    if( argc != 3 )
     {
-        std::cerr<<"Usage "<<argv[0]<<" scaff_infos all_xxx_5 min_n min_c "<<std::endl;
+        std::cerr<<"Usage "<<argv[0]<<" scaff_infos all_xxx_5 "<<std::endl;
         return 0 ;
     }
 
@@ -221,8 +209,6 @@ int main(int argc , char ** argv)
         std::cerr<<"Failed to open "<<a6<<" for read !!! exit ..."<<std::endl;
         return 0 ;
     }
-    min_n = std::stoi(std::string(argv[3]));
-    min_c = std::stoi(std::string(argv[4]));
     std::cerr<<" Load scaff_infos now ... "<<std::endl;
     BGIQD::stLFR::ScaffInfoHelper helper ;
     helper.LoadAllScaff(si_ifs);
@@ -242,6 +228,10 @@ int main(int argc , char ** argv)
                 UpdateBreakType(tmp);
                 succ_log ++ ;
                 std::cout<<tmp.ToString_v4()<<std::endl;
+            }
+            else
+            {
+                ;//no_found++;
             }
         }
     }

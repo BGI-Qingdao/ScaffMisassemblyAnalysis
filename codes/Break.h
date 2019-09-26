@@ -48,6 +48,12 @@ namespace BGIQD {
             BreakType  detect_type;
             int n_size ;
 
+            //
+            //Zone 5 1 colume
+            //
+            std::string quast_missassembly_info ;
+
+
             std::string BreakType2Str(const BreakType t ) const
             {
                 if( t == Unknow )

@@ -7,8 +7,8 @@ namespace BGIQD{
 
         bool BreakArea::InitFromStr_v1( const std::string & line )
         {
-            auto items = BGIQD::STRING::split(line);
-            if ( items.size() < 9 )
+            auto items = BGIQD::STRING::split(line,'\t');
+            if ( items.size() < 10 )
                 return false ;
             auto sids = BGIQD::STRING::split(items[0],"_");
             if(sids[0] != "scaffold" )
@@ -22,6 +22,7 @@ namespace BGIQD{
             prev_ref_end_pos= std::stoi(items[6]);
             next_ref_start_pos= std::stoi(items[7]);
             next_ref_end_pos= std::stoi(items[8]);
+            quast_missassembly_info = items[9] ;
             return true ;
         }
 
@@ -37,7 +38,8 @@ namespace BGIQD{
                 <<prev_ref_start_pos<<'\t'
                 <<prev_ref_end_pos<<'\t'
                 <<next_ref_start_pos<<'\t'
-                <<next_ref_end_pos;
+                <<next_ref_end_pos<<'\t'
+                <<quast_missassembly_info;
             return ost.str();
         }
 

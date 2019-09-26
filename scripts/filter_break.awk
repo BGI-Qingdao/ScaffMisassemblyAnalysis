@@ -43,12 +43,14 @@ BEGIN {
     {
         if( curr_name == prev_name )
         {
-            printf("%s\t%d\t%d\t%s\t%s\t%d\t%d\t%d\t%d\n",
+            printf("%s\t%d\t%d\t%s\t%s\t%d\t%d\t%d\t%d\t%s\n",
                    curr_name,
                    prev_scaff_end_pos,curr_scaff_start_pos,
                    prev_orientation,curr_orientation,
                    prev_ref_start,prev_ref_end,
-                   curr_ref_start,curr_ref_end);
+                   curr_ref_start,curr_ref_end,
+                   err_type
+                   );
         }
         else
         {
