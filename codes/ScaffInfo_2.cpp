@@ -24,18 +24,32 @@ namespace BGIQD {
         {
             std::ostringstream ost;
 
-            if( type == Type::InRef )
+            if( type == Type::InRef 
+                    || type == Type::WrongOrder
+                    || type == Type::WrongOrientation
+                    || type == Type::OOCorrect
+                    )
             {
-                ost<<"InRef"<<'\t'
-                    <<step<<'\t'
+                if( type == Type::InRef )
+                    ost<<"InRef"<<'\t';
+                else if ( type == Type::WrongOrder )
+                    ost<<"WrongOrder";
+                else if ( type == Type::WrongOrientation)
+                    ost<<"WrongOrientation";
+                else if ( type == Type::OOCorrect)
+                    ost<<"OOCorrect";
+
+                ost <<step<<'\t'
                     <<step_1<<'\t'
                     <<ref_index<<'\t'
                     <<ref<<'\t'
-                    <<ref_start<<'\t';
+                    <<ref_start<<'\t'
+                    <<ref_end<<'\t';
             }
             else if( type == Type::UnMatch)
             {
                 ost<<"UnMatch"<<'\t'
+                    <<'*'<<'\t'
                     <<'*'<<'\t'
                     <<'*'<<'\t'
                     <<'*'<<'\t'
@@ -49,7 +63,8 @@ namespace BGIQD {
                     <<"*"<<'\t'
                     <<"*"<<'\t'
                     <<ref<<'\t'
-                    <<ref_start<<'\t';
+                    <<ref_start<<'\t'
+                    <<ref_end<<'\t';
             }
             else if( type == Type::UnKnow )
             {
@@ -58,7 +73,12 @@ namespace BGIQD {
                     <<'*'<<'\t'
                     <<'*'<<'\t'
                     <<'*'<<'\t'
+                    <<'*'<<'\t'
                     <<'*'<<'\t';
+            }
+            else
+            {
+                assert(0);
             }
 
             ost <<contig_id<<'\t'
@@ -97,7 +117,7 @@ namespace BGIQD {
 
         void ScaffInfo::PrintScaff(  std::ostream &ost ) const
         {
-            ost<<">scaffold"<<scaff_id<<'\t'<< (positive ? 'P' : 'N') <<'\n';
+            ost<<">scaffold_"<<scaff_id<<'\t'<< (positive ? 'P' : 'N') <<'\n';
             for(const auto & i : a_scaff)
             {
                 ost<<i.ToString()<<'\n';
@@ -120,7 +140,7 @@ namespace BGIQD {
             {
                 if( line[0] == '>' )
                 {
-                    sscanf(line.c_str(),">scaffold %d",&id);
+                    sscanf(line.c_str(),">scaffold_%d",&id);
                     all_scaff[id].scaff_id = id ;
                 }
                 else

@@ -29,10 +29,14 @@ namespace BGIQD {
                 UnMatch = 1 ,
                 WrongRef = 2 ,
                 InRef = 3 ,
+                WrongOrder = 4 ,
+                WrongOrientation = 5 ,
+                OOCorrect = 6
             } type ;
 
             std::string ref ;
             int ref_start ;
+            int ref_end ;
             int ref_index ;
             int step ;
             int step_1;

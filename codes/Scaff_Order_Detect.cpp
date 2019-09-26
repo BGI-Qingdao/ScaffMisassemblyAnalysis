@@ -133,6 +133,7 @@ int main(int argc , char **argv)
                 ref_fre.Touch ( map_info.ref );
                 contig_detail.ref = map_info.ref ;
                 contig_detail.ref_start = map_info.ref_start ;
+                contig_detail.ref_end = map_info.ref_end ;
             }
         }
         // step2 mask unref
@@ -248,14 +249,14 @@ int main(int argc , char **argv)
         // check the orientation of step 1 && step -1 
         for(int i = 0 ; i < (int) a_scaff.size() ; i++ )
         {
-            const auto & curr = a_scaff.at(i);
+            auto & curr = a_scaff.at(i);
             if( curr.type != BGIQD::stLFR::ContigDetail::Type::InRef )
             {
                 continue ;
             }
             if( prev_i != -1 )
             {
-                if( curr.step == 1 || curr.step == -1 )
+                if ( curr.step == 1 || curr.step == -1 )
                 {
                     Orientation_total ++ ;
                     const auto & prev =  a_scaff.at(prev_i);
@@ -267,7 +268,7 @@ int main(int argc , char **argv)
 
                     from_Scaff.InitFromRef( prev.contig_id, (prev.orientation ? '+' : '-')
                             , curr.contig_id , ( curr.orientation ? '+' : '-' ) , 100);
-
+                    bool contailed = false ;
                     if ( prev_ref.ref_start < next_ref.ref_start 
                         &&
                         prev_ref.ref_end < next_ref.ref_end )
@@ -291,11 +292,21 @@ int main(int argc , char **argv)
                     else
                     {
                         orientation_but_contain ++ ;
+                        contailed = true ;
                     }
-                    if( from_Scaff.type != from_ref.type )
+                    if( !contailed && from_Scaff.type != from_ref.type )
                     {
                         Orientation_err ++ ;
+                        curr.type = BGIQD::stLFR::ContigDetail::Type::WrongOrientation;
                     }
+                    else
+                    {
+                        curr.type = BGIQD::stLFR::ContigDetail::Type::OOCorrect;
+                    }
+                }
+                else
+                {
+                    curr.type = BGIQD::stLFR::ContigDetail::Type::WrongOrder;
                 }
             }
             prev_i = i ;
