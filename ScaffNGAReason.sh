@@ -76,7 +76,7 @@ fi
 #todo
 TOOL_ROOT=`dirname $0`
 echo $TOOL_ROOT
-CTGAZ_DIR=$TOOL_ROOT"/SZContigAnalysis"
+CTGAZ_DIR=$TOOL_ROOT"/ContigGapOverlapCheck"
 SCIPT_DIR=$TOOL_ROOT"/scripts"
 TOOLS_DIR=$TOOL_ROOT"/codes"
 
