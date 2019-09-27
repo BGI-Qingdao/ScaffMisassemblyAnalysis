@@ -49,8 +49,7 @@ BEGIN {
                    prev_orientation,curr_orientation,
                    prev_ref_start,prev_ref_end,
                    curr_ref_start,curr_ref_end,
-                   err_type
-                   );
+                   err_type);
         }
         else
         {

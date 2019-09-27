@@ -8,6 +8,9 @@
 namespace BGIQD {
     namespace stLFR {
 
+        // detect which contig_error_type happened later ;
+        bool Later(const std::string type1 , const std::string & type2);
+
         struct ContigDetail
         {
             std::string type ;

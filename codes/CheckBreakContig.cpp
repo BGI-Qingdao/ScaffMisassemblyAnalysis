@@ -30,161 +30,107 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
         no_found++;
         return false ;
     }
+
     const auto & a_scaff = itr->second.a_scaff ;
-    int contig_start = 1 ;
-    int contig_end = 0 ;
-    int n_start = 0 ;
-    int n_end = 0 ;
-    bool checked = false ;
-    int target_start = tmp.start_pos ;
-    int target_end = tmp.end_pos ;
+
+    int target_start = tmp.start_pos  ;
+    int target_end = tmp.end_pos  ;
+
+    bool left_check = false ;
+    bool right_check = false ;
+    int left_index = -1 ;
+    int right_index = -1 ;
 
     for( size_t i = 0 ; i < a_scaff.size() ; i++ )
     {
+        if( left_check && right_check ) 
+            break ;
         const auto & a_c = a_scaff.at(i);
-        // no negtive gap now
-        //if( a_c.contig_len + a_c.gap_size <= 0 )
-        //{
-        //    contig_start ++ ;
-        //    continue;
-        //}
+        int contig_start = a_c.start_pos ;
+        int contig_end =   contig_start + a_c.contig_len -1 ;
+        if( ! left_check && !right_check )
+        {
+            if( contig_start<= target_start && contig_end >= target_start )
+            {
+                left_index = i ; 
+                left_check = true ;
+            }
+        }
+        else if ( left_check && !right_check )
+        {
+            if( contig_start<= target_end  && contig_end >= target_end )
+            {
+                right_index = i ; 
+                right_check = true ;
+            }
+        }
+    }
 
-        int n_size = a_c.gap_size  ;
-        contig_start = a_c.start_pos ;
-        contig_end =   contig_start + a_c.contig_len -1 ;
-        n_start =      contig_start + a_c.contig_len ;
-        n_end =        contig_start + a_c.contig_len + a_c.gap_size -1 ;
+    if( left_check && right_check ) 
+    {
+        const auto & left = a_scaff.at(left_index);
+        const auto & right = a_scaff.at(right_index);
 
-        bool this_checked = false ;
-        bool is_n = false ;
+        tmp.prev_contig = left.contig_id ;
+        tmp.next_contig = right.contig_id ;
 
-        if( target_start <= contig_start && target_end >= contig_end )
-        { //break area bigger than contig 
-            this_checked = true ;
-            is_n = false ;
-            big_nc ++ ;
-        }
-        else if( contig_start-1 <= target_start && contig_end+1 >= target_end )
-        {
-            this_checked = true ;
-            is_n = false ;
-            in_c ++ ;
-        }
-        else if( n_start <= target_start+1 && n_end +1 >= target_end  )
-        {
-            this_checked = true ;
-            is_n = true ;
-            in_n ++ ;
-        }
-        else if (  contig_start -1  <= target_start && n_end +1  >= target_end )
-        {
-            this_checked = true ;
-            is_n = true ;
-            in_nc ++;
-        }
-        else if ( n_start -1 <= target_start && n_end +1 >= target_start && n_end +1 < target_end )
-        {
-            this_checked = true ;
-            is_n = true ;
-            in_ncn ++;
-        } 
-        else if ( contig_start -1 <= target_start && contig_end +1 >= target_start && n_end + 1 <target_end )
-        {
-            this_checked = true ;
-            is_n = false ;
-            in_ncc ++;
-        } 
+        tmp.prev_contig_type = left.type ;
+        tmp.next_contig_type = right.type ;
+
+        tmp.break_size_scaff = target_end - target_start -1 ;
+
+        if( left_index == right_index )
+            tmp.is_N = '*';
+        else if ( right_index - left_index == 1 )
+            tmp.is_N = 'N' ;
         else
-        { ; }
+            tmp.is_N = '+' ;
 
-        if( this_checked )
+        if( BGIQD::stLFR::Later( tmp.prev_contig_type ,tmp.next_contig_type) )
         {
-            tmp.n_size = n_size ;
-            if( is_n )
-            {
-                tmp.is_N = 'N' ;
-                size_t prev = i ;
-                size_t next = i < a_scaff.size() -1 ?  i +1 : i ;
-                tmp.break_contig = a_c.contig_id ;
-                tmp.prev_contig = a_scaff.at(prev).contig_id;
-                tmp.next_contig = a_scaff.at(next).contig_id;
-                tmp.break_contig_step = a_c.step_num ;
-                tmp.break_contig_step_1 = a_c.step_num_1 ;
-            }
-            else 
-            {
-                tmp.is_N = '*';
-                tmp.break_contig = a_c.contig_id ;
-                size_t prev = i > 0 ? i -1 : i;
-                size_t next = i < a_scaff.size() -1 ?  i +1 : i ;
-                tmp.prev_contig = a_scaff.at(prev).contig_id;
-                tmp.next_contig = a_scaff.at(next).contig_id;
-                tmp.break_contig_step = a_c.step_num ;
-                tmp.break_contig_step_1 = a_c.step_num_1 ;
-            }
-            if( this_checked && checked )
-            {
-                cross_err ++ ;
-                break ;
-            }
-            checked = true ;
-        }
-        contig_start = n_end + 1 ;
-    }
-    if(checked )
-        return true ;
-    return false;
-}
-
-void UpdateBreakType( BGIQD::DEBUG::BreakArea & tmp )
-{
-    if( tmp.break_contig_step == "*" || tmp.break_contig_step_1 == "*" )
-    {
-        // Check contig error
-        tmp.detect_type = BGIQD::DEBUG::BreakArea::BreakType::OrderUnknow ;
-    }
-    else 
-    {
-        if( std::abs(std::stoi(tmp.break_contig_step)) > 1 
-                || std::abs(std::stoi(tmp.break_contig_step_1)) > 1 )
-        {
-            // Check order error
-            tmp.detect_type = BGIQD::DEBUG::BreakArea::BreakType::OrderError ;
+            tmp.break_type = tmp.prev_contig_type ;
+            tmp.break_contig = tmp.prev_contig ;
         }
         else
         {
-            if( tmp.prev_o != tmp.end_o )
+            tmp.break_type = tmp.next_contig_type ;
+            tmp.break_contig = tmp.next_contig ;
+        }
+        tmp.break_size_ref="*";
+        tmp.size_diff = "*" ;
+        if( tmp.break_type == "OOCorrect" )
+        {
+            if( tmp.is_N != 'N' )
             {
-                // Check orientation error
-                tmp.detect_type = BGIQD::DEBUG::BreakArea::BreakType::OrientationError ;
+                tmp.break_type == "GapError?" ;
             }
             else
             {
-                // Check gap error
-                int gap_scaff = tmp.end_pos - tmp.start_pos ;
-                int gap_ref = 0;
+                int inref = 0 ;
                 if( tmp.prev_ref_start_pos < tmp.next_ref_start_pos )
-                    gap_ref = tmp.next_ref_start_pos - tmp.prev_ref_end_pos ;
-                else 
-                    gap_ref = tmp.prev_ref_start_pos - tmp.next_ref_end_pos ;
-                int gap_diff_0  = gap_scaff - gap_ref ;
-                int gap_diff = std::abs(gap_diff_0);
-                if( gap_diff >= 9990 )
-                {
-                    tmp.detect_type = BGIQD::DEBUG::BreakArea::BreakType::GapError10K ;
-                    gap_freq.Touch(gap_diff_0);
-                }
-                else if ( gap_diff >= 990 && ( tmp.is_N == '*' || tmp.n_size < 10 ) )
-                {
-                    tmp.detect_type = BGIQD::DEBUG::BreakArea::BreakType::GapError1K ;
-                    gap_freq.Touch(gap_diff_0);
-                }
+                    inref = tmp.next_ref_start_pos - tmp.prev_ref_end_pos -1 ;
                 else
-                    tmp.detect_type = BGIQD::DEBUG::BreakArea::BreakType::Other ;
+                    inref = tmp.prev_ref_start_pos - tmp.next_ref_end_pos -1 ;
+                int diff = inref - tmp.break_size_scaff ;
+                if( tmp.break_size_scaff < 10 && std::abs(diff) >=999 )
+                    tmp.break_type == "GapError1K" ;
+                else if ( tmp.break_size_scaff >= 10 && std::abs(diff)>=9990 )
+                    tmp.break_type == "GapError10K" ;
+                else
+                    tmp.break_type == "GapError?" ;
+                tmp.break_size_ref= std::to_string(inref);
+                tmp.size_diff = std::to_string(diff);
             }
         }
+        return true ;
+    }
+    else
+    {
+        no_found ++ ;
+        return false ;
     }
 }
+
 
 int main(int argc , char ** argv)
 {
@@ -225,7 +171,6 @@ int main(int argc , char ** argv)
             scaff_log ++ ;
             if( AssignBreak( helper , tmp ))
             {
-                UpdateBreakType(tmp);
                 succ_log ++ ;
                 std::cout<<tmp.ToString_v4()<<std::endl;
             }

@@ -5,7 +5,22 @@
 namespace BGIQD {
     namespace stLFR {
 
-        //const std::string ContigDetail::ONT_FILL = "ONT_FILL" ;
+        int Type2Int(const std::string & type )
+        {
+            if ( type == "UnKnow" ) return 0 ;
+            if ( type == "UnMatch" ) return 1 ;
+            if ( type == "WrongRef" ) return 2 ;
+            if ( type == "InRef" ) return 3 ;
+            if ( type == "WrongOrder" ) return 4 ;
+            if ( type == "WrongOrientation" ) return 5 ;
+            if ( type == "OOCorrect" ) return 6 ;
+            assert(0);
+        }
+
+        bool Later(const std::string type1 , const std::string & type2)
+        {
+            return Type2Int(type1) < Type2Int(type2) ;
+        }
 
         void ContigDetail::InitFromString(const std::string &line)
         {
