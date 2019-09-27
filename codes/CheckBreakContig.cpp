@@ -102,7 +102,7 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
         {
             if( tmp.is_N != 'N' )
             {
-                tmp.break_type == "GapError?" ;
+                tmp.break_type = "GapError?" ;
             }
             else
             {
@@ -113,11 +113,11 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
                     inref = tmp.prev_ref_start_pos - tmp.next_ref_end_pos -1 ;
                 int diff = inref - tmp.break_size_scaff ;
                 if( tmp.break_size_scaff < 10 && std::abs(diff) >=999 )
-                    tmp.break_type == "GapError1K" ;
+                    tmp.break_type = "GapError1K" ;
                 else if ( tmp.break_size_scaff >= 10 && std::abs(diff)>=9990 )
-                    tmp.break_type == "GapError10K" ;
+                    tmp.break_type = "GapError10K" ;
                 else
-                    tmp.break_type == "GapError?" ;
+                    tmp.break_type = "GapError?" ;
                 tmp.break_size_ref= std::to_string(inref);
                 tmp.size_diff = std::to_string(diff);
             }
