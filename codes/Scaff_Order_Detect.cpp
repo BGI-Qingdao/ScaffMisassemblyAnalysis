@@ -312,6 +312,15 @@ int main(int argc , char **argv)
             }
             prev_i = i ;
         }
+        // Mark remain InRef as OOCorrect
+        for(int i = 0 ; i < (int) a_scaff.size() ; i++ )
+        {
+            auto & curr = a_scaff.at(i);
+            if( curr.type == BGIQD::stLFR::ContigDetail::Type::InRef )
+            {
+                curr.type = BGIQD::stLFR::ContigDetail::Type::OOCorrect;
+            }
+        }
     }
     std::cerr<<"total contig count "<<total<<std::endl;
     std::cerr<<"unmatch contig count "<<unmatch<<std::endl;
