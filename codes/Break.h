@@ -24,6 +24,8 @@ namespace BGIQD {
             int prev_ref_end_pos;
             int next_ref_end_pos;
 
+            std::string  prev_ref_name ;
+            std::string  next_ref_name ;
             //
             // Zone 2 , 5 columns
             //

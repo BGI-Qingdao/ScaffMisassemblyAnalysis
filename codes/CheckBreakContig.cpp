@@ -91,11 +91,11 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
         tmp.size_diff = "*" ;
         if( tmp.break_type == "OOCorrect" )
         {
-            if( tmp.is_N != 'N' )
+            if( tmp.is_N == '*' )
             {
-                tmp.break_type = "GapError?" ;
+                tmp.break_type = "NewContigMissassembly" ;
             }
-            else
+            else if ( tmp.is_N == 'N' )
             {
                 int inref = 0 ;
                 if( tmp.prev_ref_start_pos < tmp.next_ref_start_pos )
@@ -111,6 +111,10 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
                     tmp.break_type = "GapError?" ;
                 tmp.break_size_ref= std::to_string(inref);
                 tmp.size_diff = std::to_string(diff);
+            }
+            else
+            {
+                    tmp.break_type = "GapError?" ;
             }
         }
         return true ;
