@@ -117,7 +117,7 @@ int main(int argc , char **argv)
     {
         Freq<std::string> ref_fre;
         auto & a_scaff = pair.second.a_scaff ;
-        // step1 mask unmatch
+        // step1 mask non-seed-contig
         for( auto & contig_detail : a_scaff )
         {
             total ++ ;
@@ -136,7 +136,7 @@ int main(int argc , char **argv)
                 contig_detail.ref_end = map_info.ref_end ;
             }
         }
-        // step2 mask unref
+        // step2 mask non-major-ref
         std::string  ref;
         int max = 0 ;
         for( const auto & pair : ref_fre.data )
@@ -155,6 +155,7 @@ int main(int argc , char **argv)
                 unref ++ ;
             }
         }
+
         // step 3 , make scaff_order 
         std::vector<ContigChecker> sdata ;
         int  i = 1 ;

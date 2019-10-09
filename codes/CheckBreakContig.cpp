@@ -5,20 +5,11 @@
 #include <fstream>
 
 typedef BGIQD::FREQ::Freq<int> GapFreq ;
-GapFreq gap_freq ;
-int cross_err = 0 ;
+int error_log = 0 ;
 int succ_log=0;
 int scaff_log = 0 ;
 int total_log = 0 ;
 int min_n ;
-int min_c ;
-
-int big_nc = 0;
-int in_c = 0  ;
-int in_n = 0  ;
-int in_nc = 0 ;
-int in_ncn = 0 ;
-int in_ncc = 0 ;
 int no_found =0;
 
 bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
@@ -27,7 +18,7 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
     auto itr =  helper.all_scaff.find(tmp.scaff_id);
     if( itr == helper.all_scaff.end() )
     {
-        no_found++;
+        error_log++;
         return false ;
     }
 
@@ -56,7 +47,7 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
                 left_check = true ;
             }
         }
-        else if ( left_check && !right_check )
+        if ( left_check && !right_check )
         {
             if( contig_start<= target_end  && contig_end >= target_end )
             {
@@ -126,7 +117,7 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
     }
     else
     {
-        no_found ++ ;
+        error_log ++ ;
         return false ;
     }
 }
@@ -176,20 +167,19 @@ int main(int argc , char ** argv)
             }
             else
             {
-                ;//no_found++;
             }
+        }
+        else
+        {
+
+            no_found++;
         }
     }
     std::cerr<<" Total  "<<total_log<<std::endl;
-    std::cerr<<" Scaff  "<<scaff_log<<std::endl;
-    std::cerr<<" Succ   "<<succ_log<<std::endl;
-    std::cerr<<" ERR    "<<cross_err<<std::endl;
-    std::cerr<<" big_nc "<<big_nc<<std::endl;
-    std::cerr<<" in_c   "<<in_c<<std::endl;
-    std::cerr<<" in_n   "<<in_n<<std::endl;
-    std::cerr<<" in_nc  "<<in_nc<<std::endl;
-    std::cerr<<" in_ncn "<<in_ncn<<std::endl;
-    std::cerr<<" in_ncc "<<in_ncc<<std::endl;
-    std::cerr<<"no_found "<<no_found<<std::endl;
-    std::cerr<<"gap_diff freq :\n"<<gap_freq.ToString()<<std::endl;
+    std::cerr<<" InScaff  "<<scaff_log<<std::endl;
+    std::cerr<<" InContig "<<no_found<<std::endl;
+    std::cerr<<" SuccDetect   "<<succ_log<<std::endl;
+    std::cerr<<" ErrorDetect  "<<error_log<<std::endl;
+
+    return 0 ;
 }
