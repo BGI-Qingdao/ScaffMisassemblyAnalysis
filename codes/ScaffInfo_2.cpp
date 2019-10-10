@@ -28,6 +28,7 @@ namespace BGIQD {
                     || type == Type::WrongOrder
                     || type == Type::WrongOrientation
                     || type == Type::OOCorrect
+                    || type == Type::SeedContigRepeat 
                     )
             {
                 if( type == Type::InRef )
