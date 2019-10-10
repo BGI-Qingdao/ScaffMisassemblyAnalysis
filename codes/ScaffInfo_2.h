@@ -31,7 +31,8 @@ namespace BGIQD {
                 InRef = 3 ,
                 WrongOrder = 4 ,
                 WrongOrientation = 5 ,
-                OOCorrect = 6
+                SeedContigRepeat = 6 ,
+                OOCorrect = 7
             } type ;
 
             std::string ref ;

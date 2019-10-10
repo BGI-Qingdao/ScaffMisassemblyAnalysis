@@ -13,7 +13,8 @@ namespace BGIQD {
             if ( type == "InRef" ) return 3 ;
             if ( type == "WrongOrder" ) return 4 ;
             if ( type == "WrongOrientation" ) return 5 ;
-            if ( type == "OOCorrect" ) return 6 ;
+            if ( type == "SeedContigRepeat" ) return 6 ;
+            if ( type == "OOCorrect" ) return 7 ;
             assert(0);
         }
 

@@ -32,6 +32,8 @@ namespace BGIQD {
             {
                 if( type == Type::InRef )
                     ost<<"InRef"<<'\t';
+                else if ( type == Type::SeedContigRepeat )
+                    ost<<"SeedContigRepeat"<<'\t';
                 else if ( type == Type::WrongOrder )
                     ost<<"WrongOrder"<<'\t';
                 else if ( type == Type::WrongOrientation)

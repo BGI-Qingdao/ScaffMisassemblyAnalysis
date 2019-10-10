@@ -260,13 +260,21 @@ int main(int argc , char **argv)
                 if ( curr.step == 1 || curr.step == -1 )
                 {
                     Orientation_total ++ ;
-                    const auto & prev =  a_scaff.at(prev_i);
+                    auto & prev =  a_scaff.at(prev_i);
                     const auto & prev_ref = map_cache.at(prev.contig_id);
                     const auto & next_ref = map_cache.at(curr.contig_id);
 
                     BGIQD::stLFR::PairPN from_Scaff ;
                     BGIQD::stLFR::PairPN from_ref ;
-
+                    if( prev.contig_id == curr.contig_id )
+                    {
+                        curr.type = BGIQD::stLFR::ContigDetail::Type::SeedContigRepeat;
+                        if( prev.type == BGIQD::stLFR::ContigDetail::Type::OOCorrect )
+                        {
+                            curr.type = BGIQD::stLFR::ContigDetail::Type::SeedContigRepeat;
+                        }
+                        continue ;
+                    }
                     from_Scaff.InitFromRef( prev.contig_id, (prev.orientation ? '+' : '-')
                             , curr.contig_id , ( curr.orientation ? '+' : '-' ) , 100);
                     bool contailed = false ;
