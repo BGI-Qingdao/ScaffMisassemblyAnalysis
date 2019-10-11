@@ -52,23 +52,41 @@ or
 ## output example 
 
 ```
-      27 GapError10K
-      1 InRef
-     29 UnMatch
-     11 WrongOrder
-     28 WrongOrientation
+    ##############################################
+Misassembly now type  freq is :
+     83 GapError10K
+     14 GapError1K
+    540 NewContigMissassembly
+     46 NewWrongRef
+    721 Overlap1K
+      1 SeedContigRepeat
+    840 UnMatch
+    104 WrongOrder
+    563 WrongOrientation
+    734 WrongRef
+##############################################
+Log detail is :
+ Total  5880
+ InScaff  3646
+ InContig 2234                   <---these are the standalone contig's missassemblies , which are all ignored. 
+ SuccDetect   3646
+ ErrorDetect  0
+##############################################
+
+Done !
+
 ```
 
 # BRIEF 
 
        this script used to classify each missassmbly of quast_NGA of scaffold.
        current support types are :
-           +--contig missassmbly
+           +--standalone contig missassmbly
            |
-           +--scaffold missassbbly
+           +--in scaffold missassbbly
              +
              |
-             +-- UnMatch (contig repeat/contig unaligned/translocate...)
+             +-- UnMatch (contig repeat/contig unaligned/contig misassembly ...)
              |
              +-- WrongRef  ( not major ref )
              |
@@ -76,8 +94,20 @@ or
              |
              +-- WrongOrientation (Order correct but orientation diff in ref)
              |
-             +-- GapError1K (Order & orientation correct , n < 10 , gap_diff>1K)
+             +-- GapError
+             |     |
+             |     +--GapError1K (Order & orientation correct , n < 10 , gap_diff>1K)
+             |     |
+             |     +--GapError10K
+             |     |
+             |     +--Overlap1K
              |
-             +-- GapError10K (Order & orientation correct , n >=10 ,gap_diff>10K)
+             +-- Specical
+                   |
+                   +-- NewContigMiss
+                   |
+                   +-- NewWrongRef
+                   |
+                   +-- SeedContigRepeat
 
        each missambly will belong to one of those types .
