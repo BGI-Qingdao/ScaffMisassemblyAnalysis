@@ -183,11 +183,12 @@ int main(int argc , char **argv)
         }
         // step 5 , get a err freq
         Freq<int> step_freq ;
-        if( scaff_index_2_ref_index.size() < 3)
+        if( scaff_index_2_ref_index.size() < 2)
         {
             for ( auto & contig_detail : a_scaff )
             {
-                contig_detail.type = BGIQD::stLFR::ContigDetail::Type::WrongRef ;
+                if( contig_detail.type != BGIQD::stLFR::ContigDetail::UnMatch )
+                    contig_detail.type = BGIQD::stLFR::ContigDetail::Type::WrongRef ;
             }
             continue ;
         }

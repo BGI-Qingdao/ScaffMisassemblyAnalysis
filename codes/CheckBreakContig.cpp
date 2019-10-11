@@ -39,9 +39,15 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
         const auto & a_c = a_scaff.at(i);
         int contig_start = a_c.start_pos ;
         int contig_end =   contig_start + a_c.contig_len -1 ;
+        int contig_n_end = contig_start + a_c.contig_len + a_c.gap_size -1 ;
         if( ! left_check && !right_check )
         {
             if( contig_start<= target_start && contig_end >= target_start )
+            {
+                left_index = i ; 
+                left_check = true ;
+            }
+            else if( contig_end<= target_start && contig_n_end >= target_start )
             {
                 left_index = i ; 
                 left_check = true ;
@@ -52,6 +58,11 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
             if( contig_start<= target_end  && contig_end >= target_end )
             {
                 right_index = i ; 
+                right_check = true ;
+            }
+            else if( contig_end<= target_end && contig_n_end >= target_end )
+            {
+                right_index = i+1 ; 
                 right_check = true ;
             }
         }
