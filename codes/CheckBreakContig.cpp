@@ -77,19 +77,42 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
         else
             tmp.is_N = '+' ;
 
-        if( BGIQD::stLFR::Later( tmp.prev_contig_type ,tmp.next_contig_type) )
+        tmp.break_size_ref="*";
+        tmp.size_diff = "*" ;
+        if( tmp.is_N == '+' )
         {
-            tmp.break_type = tmp.prev_contig_type ;
-            tmp.break_contig = tmp.prev_contig ;
+            tmp.break_type = "UnMatch" ;
+            const auto mid = a_scaff.at(left_index+1);
+            tmp.break_contig = mid.contig_id ;
         }
         else
         {
-            tmp.break_type = tmp.next_contig_type ;
-            tmp.break_contig = tmp.next_contig ;
+            if( BGIQD::stLFR::Later( tmp.prev_contig_type ,tmp.next_contig_type) )
+            {
+                tmp.break_type = tmp.prev_contig_type ;
+                tmp.break_contig = tmp.prev_contig ;
+            }
+            else
+            {
+                tmp.break_type = tmp.next_contig_type ;
+                tmp.break_contig = tmp.next_contig ;
+            }
+            // check aligned map changing 
+            if( tmp.break_type == "OOCorrect" && left_index != right_index )
+            {
+                if( tmp.prev_ref_name != left.ref_name )
+                {
+                    tmp.break_type = "NewWrongRef" ;
+                    tmp.break_contig = tmp.prev_contig ;
+                }
+                else if ( tmp.next_ref_name != right.ref_name )
+                {
+                    tmp.break_type = "NewWrongRef" ;
+                    tmp.break_contig = tmp.next_contig ;
+                }
+            }
         }
-        tmp.break_size_ref="*";
-        tmp.size_diff = "*" ;
-        if( tmp.break_type == "OOCorrect" )
+        if( tmp.is_N != '+' && tmp.break_type == "OOCorrect" )
         {
             if( tmp.is_N == '*' )
             {
@@ -103,7 +126,11 @@ bool AssignBreak( const BGIQD::stLFR::ScaffInfoHelper & helper
                 else
                     inref = tmp.prev_ref_start_pos - tmp.next_ref_end_pos -1 ;
                 int diff = inref - tmp.break_size_scaff ;
-                if( tmp.break_size_scaff < 10 && std::abs(diff) >=999 )
+                if( diff < -999 )
+                {
+                    tmp.break_type = "Overlap1K" ;
+                }
+                else if( tmp.break_size_scaff < 10 && std::abs(diff) >=999 )
                     tmp.break_type = "GapError1K" ;
                 else if ( tmp.break_size_scaff >= 10 && std::abs(diff)>=9990 )
                     tmp.break_type = "GapError10K" ;

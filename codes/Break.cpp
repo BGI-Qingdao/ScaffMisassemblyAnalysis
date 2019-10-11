@@ -38,12 +38,14 @@ namespace BGIQD{
 
             ost<<prev_contig<<'\t'
                 <<prev_contig_type<<'\t'
+                <<prev_ref_name<<'\t'
                 <<prev_o<<'\t'
                 <<prev_ref_start_pos<<'\t'
                 <<prev_ref_end_pos<<'\t';
 
             ost<<next_contig<<'\t'
                 <<next_contig_type<<'\t'
+                <<next_ref_name<<'\t'
                 <<next_o<<'\t'
                 <<next_ref_start_pos<<'\t'
                 <<next_ref_end_pos<<'\t';
