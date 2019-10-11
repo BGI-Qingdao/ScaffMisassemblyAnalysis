@@ -86,7 +86,7 @@ cp $CTGAZ_DIR/* ./
 
 #>>>step 2, get contig type informtion
 new_scaff=tmp.new.scaff_infos
-$TOOLS_DIR/RePos $scaff_infos  $min_n  >$new_scaff
+$TOOLS_DIR/RePos $scaff_infos  $min_n  >$new_scaff 2>log_rp
 awk -f $SCIPT_DIR/filter_contig_name.awk sorted_unique_contig.txt >sorted_unique_contig1.txt
 $TOOLS_DIR/Scaff_Order_Detect sorted_unique_contig1.txt <$new_scaff  >scaff_type.txt 2>log_sod
 
@@ -98,4 +98,12 @@ $SCIPT_DIR/filter_allalianments.sh ./scaffold_quast_tmp.tsv >log_faa 2>&1
 $TOOLS_DIR/CheckBreakContig scaff_type.txt  scaffold_quast_tmp.tsv_5.tsv  >missassembly_type.txt 2>log_cbc
 
 #>>>step 5, show the classify information
+echo "##############################################"
+echo "Misassembly now type  freq is :"
 awk '{print $21}' <missassembly_type.txt | sort |uniq -c
+echo "##############################################"
+echo "Log detail is :"
+tail -n +3 log_cbc 
+echo "##############################################"
+echo ""
+echo "Done !"
