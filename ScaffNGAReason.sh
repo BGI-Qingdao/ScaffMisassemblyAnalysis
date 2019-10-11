@@ -98,4 +98,4 @@ $SCIPT_DIR/filter_allalianments.sh ./scaffold_quast_tmp.tsv >log_faa 2>&1
 $TOOLS_DIR/CheckBreakContig scaff_type.txt  scaffold_quast_tmp.tsv_5.tsv  >missassembly_type.txt 2>log_cbc
 
 #>>>step 5, show the classify information
-awk '{print $19}' <missassembly_type.txt | sort |uniq -c
+awk '{print $21}' <missassembly_type.txt | sort |uniq -c

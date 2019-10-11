@@ -23,7 +23,7 @@ namespace BGIQD{
             prev_ref_name=items[7];
             next_ref_start_pos= std::stoi(items[8]);
             next_ref_end_pos= std::stoi(items[9]);
-            prev_ref_name=items[10];
+            next_ref_name=items[10];
             quast_missassembly_info = items[11] ;
             return true ;
         }
