@@ -2,13 +2,13 @@
 
 ## step 1 , download all source codes.
 
->  git clone --recursive  https://github.com/BGI-Qingdao/ScaffMissassemblyAnalysis.git 
+>  git clone --recursive  https://github.com/BGI-Qingdao/ScaffMisassemblyAnalysis.git 
 
 or 
 
-> git clone https://github.com/BGI-Qingdao/ScaffMissassemblyAnalysis.git
+> git clone https://github.com/BGI-Qingdao/ScaffMisassemblyAnalysis.git
 
-> cd ScaffMissassemblyAnalysis/
+> cd ScaffMisassemblyAnalysis/
 
 > git submodule init
 
@@ -56,7 +56,7 @@ or
 Misassembly now type  freq is :
      83 GapError10K
      14 GapError1K
-    540 NewContigMissassembly
+    540 NewContigMisassembly
      46 NewWrongRef
     721 Overlap1K
       1 SeedContigRepeat
@@ -79,11 +79,11 @@ Done !
 
 # BRIEF 
 
-       this script used to classify each missassmbly of quast_NGA of scaffold.
+       this script used to classify each misassmbly of quast_NGA of scaffold.
        current support types are :
-           +--standalone contig missassmbly
+           +--standalone contig misassmbly
            |
-           +--in scaffold missassbbly
+           +--in scaffold misassembly
              +
              |
              +-- UnMatch (contig repeat/contig unaligned/contig misassembly ...)
@@ -104,10 +104,10 @@ Done !
              |
              +-- Specical
                    |
-                   +-- NewContigMiss
+                   +-- NewContigMisassembly
                    |
                    +-- NewWrongRef
                    |
                    +-- SeedContigRepeat
 
-       each missambly will belong to one of those types .
+       each misassembly will belong to one of those types .
